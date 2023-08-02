@@ -10,8 +10,11 @@ int main(int argc, char* argv[]) {
 	Snake game;
 
 	while (game.isRunning()) {
+		game.startFrame();
 		game.pollEvents();
-		game.updateScreen();
+		game.update();
+		game.show();
+		game.endFrame();
 	}
 
 	return 0;
