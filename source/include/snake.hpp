@@ -61,9 +61,11 @@ private:
 	SDL_Color foodColor;
 
 	bool running;
+	bool alive;
 	SDL_Rect snakeHead;
 	std::deque<SDL_Rect> snakeBody;
 	SDL_Rect food;
+	int score;
 	Vec2 direction;
 	Uint64 startTick;
 	Uint64 endTick;
