@@ -136,8 +136,24 @@ void Snake::endFrame() {
 }
 
 void Snake::generateFood() {
-	int newX = RANDOM_CELL_X;
-	int newY = RANDOM_CELL_Y;
+	int newX;
+	int newY;
+	while (true) {
+		bool badCoordinated = false;
+		newX = RANDOM_CELL_X;
+		newY = RANDOM_CELL_Y;
+
+		int testX = newX + PADDING/2;
+		int testY = newY + PADDING/2;
+
+		for (SDL_Rect& rect: snakeBody) {
+			if (rect.x == testX && rect.y == testY)
+				badCoordinated = true;
+		}
+
+		if (!badCoordinated)
+			break;
+	}
 
 	makeCell(food, newX, newY);
 
