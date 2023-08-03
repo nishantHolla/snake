@@ -61,6 +61,9 @@ void Snake::pollEvents() {
 
 		else if (key == SDLK_UP)
 			direction = {0, -1};
+
+		else if (key == SDLK_r && !alive)
+			reset();
 	}
 }
 
@@ -145,6 +148,16 @@ void Snake::showCell(SDL_Rect& _rect, SDL_Color& _color) {
 	SET_DRAW_COLOR(renderer, _color);
 	SDL_RenderFillRect(renderer, &_rect);
 	SDL_RenderDrawRect(renderer, &_rect);
+}
+
+void Snake::reset() {
+	makeCell(food, RANDOM_CELL_X, RANDOM_CELL_Y);
+	makeCell(snakeHead, START_X, START_Y);
+	snakeBody.clear();
+	direction = {1, 0};
+	alive = true;
+	score = 0;
+	io.output(SisIO::messageType::okay, "Game restarted.");
 }
 
 Snake::~Snake() {
