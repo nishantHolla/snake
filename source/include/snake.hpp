@@ -73,6 +73,7 @@ private:
 	void generateFood();
 	void makeCell(SDL_Rect& _rect, int _x, int _y);
 	void showCell(SDL_Rect& _rect, SDL_Color& _color);
+	void reset();
 
 // errors
 private:
