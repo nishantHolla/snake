@@ -1,12 +1,18 @@
 
+#include <random>
+#include <ctime>
+#include <deque>
 #include "snake.hpp"
 
 Snake::Snake() :
 	io ("./snakeLog"),
 	backgroundColor {0, 0, 0, 255},
 	borderColor {255, 255, 255, 255},
-	snakeColor {255, 0, 0, 255}
+	snakeColor {255, 0, 0, 255},
+	foodColor {255, 255, 0, 255}
 {
+	std::srand(std::time(NULL));
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		throw InitError("SDL");
 
@@ -19,6 +25,7 @@ Snake::Snake() :
 		throw InitError("SDL renderer");
 
 	running = true;
+	makeCell(food, RANDOM_CELL_X, RANDOM_CELL_Y);
 	makeCell(snakeHead, START_X, START_Y);
 	direction = {1, 0};
 
@@ -56,8 +63,15 @@ void Snake::pollEvents() {
 }
 
 void Snake::update() {
+	snakeBody.push_front(snakeHead);
 	snakeHead.x += (CELL_WIDTH * direction.x);
 	snakeHead.y += (CELL_WIDTH * direction.y);
+
+	if (snakeHead.x == food.x && snakeHead.y == food.y) {
+		generateFood();
+	}
+	else
+		snakeBody.pop_back();
 }
 
 void Snake::show() {
@@ -67,7 +81,10 @@ void Snake::show() {
 	SET_DRAW_COLOR(renderer, borderColor);
 	SDL_RenderDrawLine(renderer, 0, START_Y, WINDOW_WIDTH, START_Y);
 
+	showCell(food, foodColor);
 	showCell(snakeHead, snakeColor);
+	for (SDL_Rect& body: snakeBody)
+		showCell(body, snakeColor);
 
 	SDL_RenderPresent(renderer);
 }
@@ -77,6 +94,17 @@ void Snake::endFrame() {
 
 	float elapsedMS = (endTick - startTick) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
 	SDL_Delay(floor(FRAME_TARGET - elapsedMS));
+}
+
+void Snake::generateFood() {
+	int newX = RANDOM_CELL_X;
+	int newY = RANDOM_CELL_Y;
+
+	makeCell(food, newX, newY);
+
+	io.output(SisIO::messageType::info,
+			  "Generated food at [" + std::to_string(newX) + " " + std::to_string(newY) + "]"
+	);
 }
 
 void Snake::makeCell(SDL_Rect& _rect, int _x, int _y) {

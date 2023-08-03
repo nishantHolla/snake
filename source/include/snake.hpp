@@ -5,6 +5,7 @@
 #include <exception>
 #include <string>
 #include <SDL2/SDL.h>
+#include <deque>
 #include "sisIO.hpp"
 
 #define FPS 10
@@ -19,11 +20,15 @@
 
 #define CELL_WIDTH 40
 #define CELL_HEIGHT 40
+#define NUMBER_OF_COLUMNS WINDOW_WIDTH/CELL_WIDTH
+#define NUMBER_OF_ROWS WINDOW_HEIGHT/CELL_HEIGHT
 #define PADDING 10
 #define START_X 0
 #define START_Y CELL_HEIGHT
 
 #define SET_DRAW_COLOR(x, y) SDL_SetRenderDrawColor(x, y.r, y.g, y.b, y.a)
+#define RANDOM_CELL_X ( (rand() % NUMBER_OF_COLUMNS) ) * CELL_WIDTH
+#define RANDOM_CELL_Y ( (rand() % (NUMBER_OF_ROWS - 1)) + 1 ) * CELL_HEIGHT
 
 class Snake {
 public:
@@ -53,13 +58,17 @@ private:
 	SDL_Color backgroundColor;
 	SDL_Color borderColor;
 	SDL_Color snakeColor;
+	SDL_Color foodColor;
 
 	bool running;
 	SDL_Rect snakeHead;
+	std::deque<SDL_Rect> snakeBody;
+	SDL_Rect food;
 	Vec2 direction;
 	Uint64 startTick;
 	Uint64 endTick;
 
+	void generateFood();
 	void makeCell(SDL_Rect& _rect, int _x, int _y);
 	void showCell(SDL_Rect& _rect, SDL_Color& _color);
 
