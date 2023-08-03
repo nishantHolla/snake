@@ -1,6 +1,7 @@
 
 #include <random>
 #include <ctime>
+#include <SDL2/SDL_ttf.h>
 #include <deque>
 #include "snake.hpp"
 
@@ -16,6 +17,9 @@ Snake::Snake() :
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		throw InitError("SDL");
 
+	if (TTF_Init() != 0)
+		throw InitError("SDL TTF");
+
 	window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_FLAGS);
 	if (!window)
 		throw InitError("SDL window");
@@ -23,6 +27,10 @@ Snake::Snake() :
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	if (!renderer)
 		throw InitError("SDL renderer");
+
+	font = TTF_OpenFont("./font.ttf", 30);
+	if (!font)
+		throw InitError("Font");
 
 	running = true;
 	makeCell(food, RANDOM_CELL_X, RANDOM_CELL_Y);
@@ -111,6 +119,7 @@ void Snake::show() {
 	SET_DRAW_COLOR(renderer, borderColor);
 	SDL_RenderDrawLine(renderer, 0, START_Y, WINDOW_WIDTH, START_Y);
 
+	showScore();
 	showCell(food, foodColor);
 	showCell(snakeHead, snakeColor);
 	for (SDL_Rect& body: snakeBody)
@@ -150,6 +159,16 @@ void Snake::showCell(SDL_Rect& _rect, SDL_Color& _color) {
 	SDL_RenderDrawRect(renderer, &_rect);
 }
 
+void Snake::showScore() {
+	SET_DRAW_COLOR(renderer, backgroundColor);
+	std::string scoreText = "Score: " + std::to_string(score);
+	SDL_Surface* scoreSurface = TTF_RenderText_Solid(font, scoreText.c_str(), borderColor);
+	SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
+	SDL_Rect scoreRect {0, 0, scoreSurface->w, scoreSurface->h};
+	SDL_RenderCopy(renderer, scoreTexture, &scoreRect, &scoreRect);
+	SDL_RenderDrawRect(renderer, &scoreRect);
+}
+
 void Snake::reset() {
 	makeCell(food, RANDOM_CELL_X, RANDOM_CELL_Y);
 	makeCell(snakeHead, START_X, START_Y);
@@ -161,6 +180,8 @@ void Snake::reset() {
 }
 
 Snake::~Snake() {
+	TTF_CloseFont(font);
+	TTF_Quit();
 	SDL_Quit();
 	io.output(SisIO::messageType::okay, "Game ended successfully.");
 }

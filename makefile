@@ -11,7 +11,7 @@ LIBRARY_DIR=$(SOURCE_DIR)/library
 PROJECT_NAME=snake
 SOURCE=$(SOURCE_DIR)/main.cpp $(SOURCE_DIR)/snake.cpp
 OUTPUT=./output/$(PROJECT_NAME)
-LIBRARIES=-lsisIO `pkg-config --cflags sdl2`
+LIBRARIES=-lsisIO `pkg-config --cflags sdl2` -lSDL2_ttf
 
 debug:
 	$(CC) $(SOURCE) $(FLAGS) $(DEBUG_FLAGS) -I$(INCLUDE_DIR) -L$(LIBRARY_DIR) $(LIBRARIES) -o $(OUTPUT)

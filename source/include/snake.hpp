@@ -5,6 +5,7 @@
 #include <exception>
 #include <string>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <deque>
 #include "sisIO.hpp"
 
@@ -59,6 +60,7 @@ private:
 	SDL_Color borderColor;
 	SDL_Color snakeColor;
 	SDL_Color foodColor;
+	TTF_Font* font;
 
 	bool running;
 	bool alive;
@@ -73,6 +75,7 @@ private:
 	void generateFood();
 	void makeCell(SDL_Rect& _rect, int _x, int _y);
 	void showCell(SDL_Rect& _rect, SDL_Color& _color);
+	void showScore();
 	void reset();
 
 // errors
