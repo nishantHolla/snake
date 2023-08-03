@@ -28,6 +28,8 @@ Snake::Snake() :
 	makeCell(food, RANDOM_CELL_X, RANDOM_CELL_Y);
 	makeCell(snakeHead, START_X, START_Y);
 	direction = {1, 0};
+	alive = true;
+	score = 0;
 
 	io.output(SisIO::messageType::okay, "Game started successfully.");
 }
@@ -63,18 +65,43 @@ void Snake::pollEvents() {
 }
 
 void Snake::update() {
+	if (!alive)
+		return;
+
 	snakeBody.push_front(snakeHead);
 	snakeHead.x += (CELL_WIDTH * direction.x);
 	snakeHead.y += (CELL_WIDTH * direction.y);
 
+	if ( snakeHead.x < START_X || snakeHead.x > WINDOW_WIDTH || snakeHead.y < START_Y || snakeHead.y > WINDOW_HEIGHT ) {
+		alive = false;
+		return;
+	}
+
+	for (SDL_Rect& body: snakeBody) {
+		if (body.x == snakeHead.x && body.y == snakeHead.y) {
+			alive = false;
+			return;
+		}
+	}
+
 	if (snakeHead.x == food.x && snakeHead.y == food.y) {
 		generateFood();
+		score++;
 	}
+
 	else
 		snakeBody.pop_back();
 }
 
 void Snake::show() {
+	if (!alive) {
+		for (SDL_Rect& body: snakeBody)
+			showCell(body, borderColor);
+
+		SDL_RenderPresent(renderer);
+		return;
+	}
+
 	SET_DRAW_COLOR(renderer, backgroundColor);
 	SDL_RenderClear(renderer);
 
