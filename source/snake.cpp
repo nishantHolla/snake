@@ -7,10 +7,10 @@
 
 Snake::Snake() :
 	io ("./snakeLog"),
-	backgroundColor {0, 0, 0, 255},
-	borderColor {255, 255, 255, 255},
-	snakeColor {255, 0, 0, 255},
-	foodColor {255, 255, 0, 255}
+	backgroundColor {13, 13, 13, 255},
+	borderColor {240, 241, 223, 255},
+	snakeColor {240, 80, 79, 255},
+	foodColor {247, 243, 111, 255}
 {
 	std::srand(std::time(NULL));
 
