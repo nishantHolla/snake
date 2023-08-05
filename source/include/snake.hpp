@@ -15,8 +15,8 @@
 #define WINDOW_TITLE "Snake"
 #define WINDOW_POS_X 0
 #define WINDOW_POS_Y 0
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
 #define WINDOW_FLAGS SDL_WINDOW_SHOWN
 
 #define CELL_WIDTH 40
@@ -53,14 +53,14 @@ private:
 
 	SisIO io;
 
-	SDL_Window* window;
-	SDL_Renderer* renderer;
+	SDL_Window *window;
+	SDL_Renderer *renderer;
 
 	SDL_Color backgroundColor;
 	SDL_Color borderColor;
 	SDL_Color snakeColor;
 	SDL_Color foodColor;
-	TTF_Font* font;
+	TTF_Font *font;
 
 	bool running;
 	bool alive;
@@ -82,14 +82,14 @@ private:
 private:
 	class InitError : public std::exception {
 	public:
-		InitError(const char* _source) :
+		InitError(const char *_source) :
 			source (_source)
 		{ };
 
 		const std::string what() {return "Failed to initialize " + std::string(source) + "." + SDL_GetError();}
 
 	private:
-		const char* source;
+		const char *source;
 	};
 
 
