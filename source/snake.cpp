@@ -20,7 +20,7 @@ Snake::Snake() :
 	if (TTF_Init() != 0)
 		throw InitError("SDL TTF");
 
-	window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_FLAGS);
+	window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	if (!window)
 		throw InitError("SDL window");
 
@@ -178,8 +178,8 @@ void Snake::showCell(SDL_Rect& _rect, SDL_Color& _color) {
 void Snake::showScore() {
 	SET_DRAW_COLOR(renderer, backgroundColor);
 	std::string scoreText = "Score: " + std::to_string(score);
-	SDL_Surface* scoreSurface = TTF_RenderText_Solid(font, scoreText.c_str(), borderColor);
-	SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
+	SDL_Surface *scoreSurface = TTF_RenderText_Solid(font, scoreText.c_str(), borderColor);
+	SDL_Texture *scoreTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
 	SDL_Rect scoreRect {0, 0, scoreSurface->w, scoreSurface->h};
 	SDL_RenderCopy(renderer, scoreTexture, &scoreRect, &scoreRect);
 	SDL_RenderDrawRect(renderer, &scoreRect);

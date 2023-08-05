@@ -4,8 +4,8 @@
 
 const char *shiftArgs(int *_argcPtr, char **_argvPtr[]);
 
-int main(int argc, char* argv[]) {
-	const char* program = shiftArgs(&argc, &argv);
+int main(int argc, char *argv[]) {
+	const char *program = shiftArgs(&argc, &argv);
 
 	Snake game;
 
