@@ -4,13 +4,13 @@ FLAGS=`pkg-config --libs sdl2`
 DEBUG_FLAGS=-O0 -g -Wall -Wextra -pedantic
 RELEASE_FLAGS=-O3
 
-SOURCE_DIR=./source
+SOURCE_DIR=./src
 INCLUDE_DIR=$(SOURCE_DIR)/include
 LIBRARY_DIR=$(SOURCE_DIR)/library
 
 PROJECT_NAME=snake
 SOURCE=$(SOURCE_DIR)/main.cpp $(SOURCE_DIR)/snake.cpp
-OUTPUT=./output/$(PROJECT_NAME)
+OUTPUT=./out/$(PROJECT_NAME)
 LIBRARIES=-lsisIO `pkg-config --cflags sdl2` -lSDL2_ttf
 
 debug:
