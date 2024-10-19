@@ -67,6 +67,11 @@ void Snake::pollEvents() {
 
     else if (key == SDLK_r && !alive)
       reset();
+
+    else if (key == SDLK_q){
+      running = false;
+      continue;
+    }
   }
 }
 
