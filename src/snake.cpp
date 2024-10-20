@@ -1,4 +1,3 @@
-
 #include <SDL2/SDL_ttf.h>
 
 #include <ctime>
@@ -8,39 +7,41 @@
 #include "snake.hpp"
 
 Snake::Snake()
-    : io("./snakeLog"),
-      backgroundColor{13, 13, 13, 255},
-      borderColor{240, 241, 223, 255},
-      snakeColor{240, 80, 79, 255},
-      foodColor{247, 243, 111, 255} {
-  std::srand(std::time(NULL));
+  : io("./snakeLog"),
+  backgroundColor{13, 13, 13, 255},
+  borderColor{240, 241, 223, 255},
+  snakeColor{240, 80, 79, 255},
+  foodColor{247, 243, 111, 255} {
 
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) throw InitError("SDL");
+    std::srand(std::time(NULL));
 
-  if (TTF_Init() != 0) throw InitError("SDL TTF");
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) throw InitError("SDL");
+    if (TTF_Init() != 0) throw InitError("SDL TTF");
 
-  window =
+    window =
       SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y, WINDOW_WIDTH,
-                       WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
-  if (!window) throw InitError("SDL window");
+          WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    if (!window) throw InitError("SDL window");
 
-  renderer = SDL_CreateRenderer(window, -1, 0);
-  if (!renderer) throw InitError("SDL renderer");
+    renderer = SDL_CreateRenderer(window, -1, 0);
+    if (!renderer) throw InitError("SDL renderer");
 
-  font = TTF_OpenFont("./font.ttf", 30);
-  if (!font) throw InitError("Font");
+    font = TTF_OpenFont("./font.ttf", 30);
+    if (!font) throw InitError("Font");
 
-  running = true;
-  makeCell(food, RANDOM_CELL_X, RANDOM_CELL_Y);
-  makeCell(snakeHead, START_X, START_Y);
-  direction = {1, 0};
-  alive = true;
-  score = 0;
+    running = true;
+    makeCell(food, RANDOM_CELL_X, RANDOM_CELL_Y);
+    makeCell(snakeHead, START_X, START_Y);
+    direction = {1, 0};
+    alive = true;
+    score = 0;
 
-  io.output(SisIO::messageType::okay, "Game started successfully.");
+    io.output(SisIO::messageType::okay, "Game started successfully.");
+  }
+
+void Snake::startFrame() {
+  startTick = SDL_GetPerformanceCounter();
 }
-
-void Snake::startFrame() { startTick = SDL_GetPerformanceCounter(); }
 
 void Snake::pollEvents() {
   SDL_Event event = {0};
@@ -130,7 +131,7 @@ void Snake::endFrame() {
   endTick = SDL_GetPerformanceCounter();
 
   float elapsedMS =
-      (endTick - startTick) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+    (endTick - startTick) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
   SDL_Delay(floor(FRAME_TARGET - elapsedMS));
 }
 
@@ -155,8 +156,8 @@ void Snake::generateFood() {
   makeCell(food, newX, newY);
 
   io.output(SisIO::messageType::info, "Generated food at [" +
-                                          std::to_string(newX) + " " +
-                                          std::to_string(newY) + "]");
+      std::to_string(newX) + " " +
+      std::to_string(newY) + "]");
 }
 
 void Snake::makeCell(SDL_Rect &_rect, int _x, int _y) {
@@ -176,9 +177,9 @@ void Snake::showScore() {
   SET_DRAW_COLOR(renderer, backgroundColor);
   std::string scoreText = "Score: " + std::to_string(score);
   SDL_Surface *scoreSurface =
-      TTF_RenderText_Solid(font, scoreText.c_str(), borderColor);
+    TTF_RenderText_Solid(font, scoreText.c_str(), borderColor);
   SDL_Texture *scoreTexture =
-      SDL_CreateTextureFromSurface(renderer, scoreSurface);
+    SDL_CreateTextureFromSurface(renderer, scoreSurface);
   SDL_Rect scoreRect{0, 0, scoreSurface->w, scoreSurface->h};
   SDL_RenderCopy(renderer, scoreTexture, &scoreRect, &scoreRect);
   SDL_RenderDrawRect(renderer, &scoreRect);

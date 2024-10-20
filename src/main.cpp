@@ -1,6 +1,5 @@
-
+#include <cstddef>
 #include <iostream>
-
 #include "snake.hpp"
 
 const char *shiftArgs(int *_argcPtr, char **_argvPtr[]);
@@ -22,8 +21,12 @@ int main(int argc, char *argv[]) {
 }
 
 const char *shiftArgs(int *_argcPtr, char **_argvPtr[]) {
-  (*_argcPtr)--;
+  if (*_argcPtr == 0) {
+    return NULL;
+  }
+
   const char *arg = (*_argvPtr)[0];
+  (*_argcPtr)--;
   (*_argvPtr)++;
   return arg;
 }

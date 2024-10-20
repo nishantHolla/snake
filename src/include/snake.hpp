@@ -1,10 +1,15 @@
-
 #ifndef SNAKE_H_
 #define SNAKE_H_
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_error.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <SDL2/SDL_video.h>
 #include <deque>
 #include <exception>
 #include <string>
@@ -34,66 +39,66 @@
 #define RANDOM_CELL_Y ((rand() % (NUMBER_OF_ROWS - 1)) + 1) * CELL_HEIGHT
 
 class Snake {
- public:
-  Snake();
-  bool isRunning() { return running; };
+  public:
+    Snake();
+    bool isRunning() { return running; };
 
-  void startFrame();
-  void pollEvents();
-  void update();
-  void show();
-  void endFrame();
+    void startFrame();
+    void pollEvents();
+    void update();
+    void show();
+    void endFrame();
 
-  ~Snake();
+    ~Snake();
 
- private:
-  struct Vec2 {
-   public:
-    int x;
-    int y;
-  };
+  private:
+    struct Vec2 {
+      public:
+        int x;
+        int y;
+    };
 
-  SisIO io;
+    SisIO io;
 
-  SDL_Window *window;
-  SDL_Renderer *renderer;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
 
-  SDL_Color backgroundColor;
-  SDL_Color borderColor;
-  SDL_Color snakeColor;
-  SDL_Color foodColor;
-  TTF_Font *font;
+    SDL_Color backgroundColor;
+    SDL_Color borderColor;
+    SDL_Color snakeColor;
+    SDL_Color foodColor;
+    TTF_Font *font;
 
-  bool running;
-  bool alive;
-  SDL_Rect snakeHead;
-  std::deque<SDL_Rect> snakeBody;
-  SDL_Rect food;
-  int score;
-  Vec2 direction;
-  Uint64 startTick;
-  Uint64 endTick;
+    bool running;
+    bool alive;
+    SDL_Rect snakeHead;
+    std::deque<SDL_Rect> snakeBody;
+    SDL_Rect food;
+    int score;
+    Vec2 direction;
+    Uint64 startTick;
+    Uint64 endTick;
 
-  void generateFood();
-  void makeCell(SDL_Rect &_rect, int _x, int _y);
-  void showCell(SDL_Rect &_rect, SDL_Color &_color);
-  void showScore();
-  void reset();
+    void generateFood();
+    void makeCell(SDL_Rect &_rect, int _x, int _y);
+    void showCell(SDL_Rect &_rect, SDL_Color &_color);
+    void showScore();
+    void reset();
 
-  // errors
- private:
-  class InitError : public std::exception {
-   public:
-    InitError(const char *_source) : source(_source){};
+    // errors
+  private:
+    class InitError : public std::exception {
+      public:
+        InitError(const char *_source) : source(_source){};
 
-    const std::string what() {
-      return "Failed to initialize " + std::string(source) + "." +
-             SDL_GetError();
-    }
+        const std::string what() {
+          return "Failed to initialize " + std::string(source) + "." +
+            SDL_GetError();
+        }
 
-   private:
-    const char *source;
-  };
+      private:
+        const char *source;
+    };
 };
 
 #endif  //! SNAKE_H_
